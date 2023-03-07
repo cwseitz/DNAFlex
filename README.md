@@ -1,4 +1,6 @@
-# Single molecule localization microscopy (SMLM)
+# DNA single molecule localization microscopy (DNA-SMLM)
+
+Abbreviated as just SMLM, is a library built on Python and C for SMLM experiment design, optimization, and analysis
 
 ## Current modules
 
@@ -13,5 +15,6 @@ A toolkit for simulations and analysis related to DNA SMLM in Python. The packag
 
 5. **md** Coarse-grained molecular dynamics simulations for nucleosome ball and stick type models
 6. **mcmc** Markov Chain Monte Carlo samplers for performing Bayesian inference on SMLM-related models
+7. **torch** A place for PyTorch models related to SMLM
 
 Certain modules with a subfolder **_MODULE** contain backend C code for optimization.
