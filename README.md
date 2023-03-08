@@ -14,7 +14,7 @@ A toolkit for simulations and analysis related to DNA SMLM in Python. The packag
 ## Modules in progress
 
 5. **md** Coarse-grained molecular dynamics simulations for nucleosome ball and stick type models
-6. **stats** Statistical software, Markov Chain Monte Carlo samplers for performing Bayesian inference on SMLM-related models
+6. **stats** Statistical software, Markov Chain Monte Carlo samplers for performing Bayesian inference on SMLM-related models, maximum likelihood estimators
 7. **torch** A place for any PyTorch deep models related to SMLM
 
 Certain modules with a subfolder **_MODULE** contain backend C code for optimization.
