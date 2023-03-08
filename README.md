@@ -1,4 +1,4 @@
-# Single molecule localization microscopy for coarse grained DNA structure aka DNAFlex-SR
+# Single molecule localization microscopy for coarse grained DNA structure or DNAFlex
 
 Abbreviated as just SMLM, is a library built on Python and C for SMLM experiment design, optimization, and analysis
 
