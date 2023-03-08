@@ -8,7 +8,7 @@ A toolkit for simulations and analysis related to DNA SMLM in Python. The packag
 
 1. **localize** Basic particle detection and tracking functions for static and dynamic single molecule data
 2. **psf** Gaussian point spread function models in 3D, sCMOS noise models, and information theoretic localization techniques
-3. **switch** Functions for performing Monte Carlo simulations of photoswitching dynamics of fluorophores
+3. **ssa** Functions for performing Monte Carlo simulations of photoswitching dynamics of fluorophores
 4. **plot** A variety of functions for generating common SMLM plots and making animations
 
 ## Modules in progress
