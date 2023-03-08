@@ -6,40 +6,7 @@ from autograd.scipy.special import erf
 from scipy.optimize import minimize
 from scipy.special import factorial
 
-class NoisyGaussianPSF:
-    def __init__(self,x0,y0,b,L,I0,alpha,eta,gain,rmu,rvar,depth=16):
-        frame = np.zeros((L,L))
-        x = np.arange(0,L); y = np.arange(0,L)
-        X,Y = np.meshgrid(x,y)
-        intx = 0.5*(erf((X+0.5-x0)*alpha)-erf((X-0.5-x0)*alpha))
-        inty = 0.5*(erf((Y+0.5-y0)*alpha)-erf((Y-0.5-y0)*alpha))
-        self.mu = b + eta*I0*intx*inty
-        self.pe = np.random.poisson(lam=self.mu) #photoelectrons
-        self.X = gain*self.pe
-        self.read_noise = np.random.normal(rmu,np.sqrt(rvar))
-        self.X += self.read_noise
-        max_adu = 2**depth - 1
-        self.X = self.X.astype(np.int16)
-        self.X[self.X > max_adu] = max_adu # models pixel saturation
-
-    def plot_generated(self):
-        fig, ax = plt.subplots(2,2,figsize=(4,3))
-        im1 = ax[0,0].imshow(self.mu,cmap='gray')
-        ax[0,0].set_xticks([]);ax[0,0].set_yticks([])
-        plt.colorbar(im1, ax=ax[0,0], label=r'$\mu_{p}$')
-        im2 = ax[0,1].imshow(self.pe,cmap='gray')
-        ax[0,1].set_xticks([]);ax[0,1].set_yticks([])
-        plt.colorbar(im2, ax=ax[0,1], label=r'$e^{-}$')
-        im3 = ax[1,0].imshow(self.read_noise,cmap='gray')
-        ax[1,0].set_xticks([]);ax[1,0].set_yticks([])
-        plt.colorbar(im3, ax=ax[1,0], label=r'$\xi$ (ADU)')
-        im4 = ax[1,1].imshow(self.X,cmap='gray')
-        ax[1,1].set_xticks([]);ax[1,1].set_yticks([])
-        plt.colorbar(im4, ax=ax[1,1], label=r'ADU')
-        plt.tight_layout()
-        plt.show()
-
-class NoisyGaussianPSFAnalytic:
+class GaussianPSF:
     def __init__(self,x0,y0,b,L,I0,alpha,eta,gain,rmu,rvar,depth=16):
         self.x0 = x0 #true x-coordinate
         self.y0 = y0 #true y-coordinate
@@ -127,73 +94,3 @@ class NoisyGaussianPSFAnalytic:
     def gauss(self,x,x0,sigma):
         return np.exp(-((x-x0)**2)/(2*sigma**2))
 
-
-class NoisyGaussianPSFMLE:
-    def __init__(self,X):
-        self.X = X
-    def estimate(self,theta0,alpha,gain,I0,eta,rmu,rvar):
-        L = self.X.shape[0]
-        def neg_loglike(theta):
-            x0,y0 = theta
-            x = np.arange(0,L)
-            y = np.arange(0,L)
-            X,Y = np.meshgrid(x,y)
-            intx = 0.5*(erf((X+0.5-x0)*alpha)-erf((X-0.5-x0)*alpha))
-            inty = 0.5*(erf((Y+0.5-y0)*alpha)-erf((Y-0.5-y0)*alpha))
-            pmu = gain*I0*eta*intx*inty
-            mu = rmu + pmu
-            var = rvar + pmu
-            nll = 0.5*np.log(2*np.pi*var) + ((self.X-mu)**2)/(2*var)
-            ll = np.sum(nll)
-            return ll
-        jacobian_ = jacobian(neg_loglike)
-        bounds = [(4,6),(4,6)]
-        res1 = minimize(neg_loglike, theta0, method = 'BFGS', \
-        	       options={'disp': True}, bounds=bounds, jac = jacobian_)
-        return res1
-
-    def plot_mle_surf(self,alpha,gain,I0,eta,rmu,rvar,nx=100,ny=100):
-        L = self.X.shape[0]
-        def neg_loglike(theta):
-            x0,y0 = theta
-            x = np.arange(0,L)
-            y = np.arange(0,L)
-            X,Y = np.meshgrid(x,y)
-            intx = 0.5*(erf((X+0.5-x0)*alpha)-erf((X-0.5-x0)*alpha))
-            inty = 0.5*(erf((Y+0.5-y0)*alpha)-erf((Y-0.5-y0)*alpha))
-            pmu = gain*I0*eta*intx*inty
-            mu = rmu + pmu
-            var = rvar + pmu
-            nll = 0.5*np.log(2*np.pi*var) + ((self.X-mu)**2)/(2*var)
-            ll = np.sum(nll)
-            return ll
-        xs = np.linspace(0,L,nx); ys = np.linspace(0,L,ny)
-        xv, yv = np.meshgrid(xs,ys)
-        lsurf = np.zeros((nx,ny))
-        jtensor = np.zeros((nx,ny,2))
-        htensor = np.zeros((nx,ny,2,2))
-        jacobian_ = jacobian(neg_loglike)
-        hessian_ = hessian(neg_loglike)
-        for i in range(nx):
-            for j in range(ny):
-                theta = np.append(xv[i,j],yv[i,j])
-                lsurf[i,j] = neg_loglike(theta)
-                jtensor[i,j] = jacobian_(theta)
-                htensor[i,j] = hessian_(theta)
-        jsurf = np.sqrt(np.sum(jtensor**2,axis=-1))
-        hsurf = np.trace(htensor,axis1=2,axis2=3)
-        fig, ax = plt.subplots(2,2,figsize=(4,3))
-        im1 = ax[0,0].imshow(self.X,cmap='plasma')
-        ax[0,0].set_xticks([]);ax[0,0].set_yticks([])
-        plt.colorbar(im1, ax=ax[0,0], label='ADU')
-        im2 = ax[0,1].imshow(lsurf,cmap='plasma')
-        ax[0,1].set_xticks([]);ax[0,1].set_yticks([])
-        plt.colorbar(im2, ax=ax[0,1], label=r'$\ell(x,y)$')
-        im3 = ax[1,0].imshow(jsurf,cmap='plasma')
-        ax[1,0].set_xticks([]);ax[1,0].set_yticks([])
-        plt.colorbar(im3, ax=ax[1,0], label=r'$|\nabla \ell|$')
-        im4 = ax[1,1].imshow(hsurf,cmap='plasma')
-        ax[1,1].set_xticks([]);ax[1,1].set_yticks([])
-        plt.colorbar(im4, ax=ax[1,1], label=r'$\mathrm{Tr}(H)$')
-        plt.tight_layout()
-        plt.show()
