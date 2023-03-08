@@ -13,7 +13,7 @@ A toolkit for simulations and analysis related to DNA SMLM in Python. The packag
 
 ## Modules in progress
 
-5. **md** Coarse-grained molecular dynamics simulations for nucleosome ball and stick type models
+5. **flex** DNA Flex: Monte Carlo simulations of flexible linker DNA and rigid nucleosomes
 6. **stats** Statistical software e.g., Markov Chain Monte Carlo samplers for performing Bayesian inference on SMLM-related models, maximum likelihood estimators
 7. **torch** A place for any PyTorch deep models related to SMLM
 
