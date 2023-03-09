@@ -1,0 +1,7 @@
+README.md
+setup.py
+DNAFlex/__init__.py
+DNAFlex.egg-info/PKG-INFO
+DNAFlex.egg-info/SOURCES.txt
+DNAFlex.egg-info/dependency_links.txt
+DNAFlex.egg-info/top_level.txt

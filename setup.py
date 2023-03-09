@@ -1,11 +1,11 @@
 from setuptools import setup
 
 setup(
-    name='smlm',
+    name='DNAFlex',
     version='1.0.0',
-    description='SMLM is a collection of algorithms for modeling and analyzing single molecule localization microscopy data',
+    description='DNAFlex is a collection of algorithms for modeling and analyzing super resolution imaging data of DNA',
     author='Clayton Seitz',
     author_email='cwseitz@iu.edu',
-    packages=['smlm']
+    packages=['DNAFlex']
     )
 
