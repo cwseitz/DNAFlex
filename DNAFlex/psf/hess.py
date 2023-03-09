@@ -14,9 +14,9 @@ from .jac1 import jacobian1
 from .jac2 import jacobian2
 import matplotlib.pyplot as plt
 
-def loglike(theta,counts):
+def negloglike(theta,counts,eta,texp):
     lx, ly = counts.shape
-    x0,y0,sigma,N0,eta,texp = theta
+    x0,y0,sigma,N0 = theta
     alpha = np.sqrt(2)*sigma
     X,Y = np.meshgrid(np.arange(0,lx),np.arange(0,ly))
     X = X.ravel(); Y = Y.ravel(); counts = counts.ravel()
@@ -24,9 +24,10 @@ def loglike(theta,counts):
     lamdy = 0.5*(erf((Y+0.5-y0)/alpha) - erf((Y-0.5-y0)/alpha))
     I0 = eta*N0*texp
     mu = I0*lamdx*lamdy + 1e-8
-    ll = counts*np.log(mu) - np.log(factorial(counts)) - mu
+    stirling = counts*np.log(counts) - counts
+    ll = counts*np.log(mu) - stirling - mu
     ll = np.sum(ll)
-    return ll
+    return -1*ll
 
 def hessian_analytical(theta, counts):
     lx, ly = counts.shape

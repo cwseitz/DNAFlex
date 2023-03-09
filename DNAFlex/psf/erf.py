@@ -31,7 +31,7 @@ class GaussianPSF:
         adu[adu > max_adu] = max_adu
         if plot:
             self.show(lam,electrons,noise,adu)
-        return adu 
+        return adu
     def read_noise(self,adu):
         noise = np.random.normal(self.rmu,np.sqrt(self.rvar),size=adu.shape)
         adu += noise
