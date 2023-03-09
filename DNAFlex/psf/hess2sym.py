@@ -19,7 +19,6 @@ h_sx = L.diff(sigma).diff(x0)
 h_sy = L.diff(sigma).diff(y0)
 h_ss = L.diff(sigma).diff(sigma)
 
-# Compute the Hessian using the common factors
 H = sp.Matrix([[h_xx,h_xy,h_xs], [h_yx,h_yy,h_ys], [h_sx,h_sy,h_ss]])
 
 # Convert to numerical function
