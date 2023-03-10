@@ -18,3 +18,9 @@ A toolkit for simulations and analysis related to DNA SMLM in Python. The packag
 7. **torch** A place for any PyTorch deep models related to SMLM
 
 Certain modules with a subfolder **_MODULE** contain backend C code for optimization.
+
+## How to run DNAFlex C code
+
+```
+sh run.sh nucl_pos.dat link_seq.dat 10 helpars.dat /home/cwseitz/Desktop/test
+```
