@@ -1,14 +1,3 @@
-/* --------------- CHANGE IN THIS PROGRAM TO ORIGINAL ---------------- */
-
-/* 
-
-1) The arrays seq1,stif and geom are adjusted so that to each single bp-step a stiffness matrix can be assigned and not just an average stiffness matrix as before 
-
-2) Another output file "table_all_(helpar).dat" is provided which gives all (helpar) parameters for each MC optimization (each line of the table equals the (helpar) parameters of the examined sequence)
-
-*/
-
-
 /* Define functions */
 #define min(a, b) (((a) + (b) - fabs((a) - (b))) * 0.5)
 /* End Define */
@@ -25,15 +14,10 @@
 #include "umbrella.h"	// Functions needed for Cartesian reconstruction
 #include "energy.h"	// Functions for calculating int energies
 
-/* Headers from SCHNArP */
-
+/*
 #include "schna_ar_p.h"
-
 #include <time.h>
-
 /* End Headers */
-
-
 
 
 /*--------------------------Beginning of DNAFlex-------------------------*/
@@ -85,49 +69,8 @@ sscanf(argv[1], "%d", &fo_ind);	// for outputing in different folders
 //printf("%s\n",out_folder);
 }
 else{
-//sprintf(out_folder,"/usr/people/jwalther/Programs/Chromatin/src_test");	//be careful with length of string for out_folder as defined above
-}
-//char out_folder[] =  "/home/MuG/MuG_Chromatin_sampling/src_test";
-//"/orozco/projects/MontecarloJurgen/data/chromatin/1000bp_linker/polyC";	//"/orozco/projects/MontecarloJurgen/data/chromatin/2000bp_linker/test_no_min/1_ed_rndstart";	//"/orozco/projects/MontecarloJurgen/data/chromatin/nucl_12_62_linker/alter_lj_a_nucl/200";	//"/orozco/projects/MontecarloJurgen/data/chromatin/nucl_12_62_linker/7";//"/home/jwalther/Programs/Chromatin/src_test";	   //"/orozco/projects/MontecarloJurgen/data/chromatin/nucl_12_62_linker";   	//"/orozco/projects/MontecarloJurgen/data/chromatin/2000bp_linker/energy_conv3";	//"/orozco/projects/MontecarloJurgen/data/chromatin/diff_ll/diff_gene_size/energy_conv3";		//"/orozco/projects/MontecarloJurgen/data/chromatin/diff_ll/equ_gene_size";    //"/home/jwalther/Programs/Chromatin/src_test";    	//"/scratch/orozco/jwalther/chromatin/200mer/random_seq5/test/test_acc";
-
-//char seq_file[] = "dep_seq_200_105.dat";							
+					
 char stif_file[] = "stif_chrom_nfr_half_flex_200.dat";
-//int ins_nucl[] = {4,24,44,64,84,104,124,144,164,184,384,404,424,444,464,484,504,524,544,564};	//{x,y} means inserting at bp step x and y
-
-// 13bp linker: 11,24,37,50,63,76,89,102,115,128,141,154,167,180
-// 10bp linker: 9,19,29,39,49,59,69,79,89,99,109,119,129,139,149,159,169,179
-// 16bp linker: 15,31,47,63,79,95,111,127,143,159
-// 18bp linker: 11,29,47,65,83,101,119,137,155,173
-// 21bp linker: 19,40,61,82,103,124,145,166,187
-// 22bp linker: 19,41,63,85,107,129,151,173 (gives right yeast structure)
-// 23bp linker: 22,45,68,91,114,137,160,183
-// Test 300mer: 19,39,59,79,99,119,139,159,179,199,219,239,259,279
-// 600mer: 19,39,59,79,99,119,139,159,179,199,219,239,259,279,299,319,339,359,379,399,419,439,459,479,499,519,539,559,579
-// regular fiber: 19,39,59,79,99,119,139,159,179,199,219,239,259,279,299,319,339,359,379,399,419,439,459,479,499,519,539,559,579,599,619,639,659, 679,699,719,739,759,779,799,819,839,859,879,899,919,939,959,979,999,1019,1039,1059,1079,1099,1119,1139,1159,1179,1199,1219,1239, 1259,1279,1299,1319,1339,1359,1379,1399,1419,1439,1459,1479,1499,1519,1539,1559,1579,1599,1619,1639,1659,1679,1699,1719,1739, 1759,1779,1799,1819,1839,1859,1879,1899,1919,1939,1959,1979
-// 15bp linker: 24,39,54,69,84,99,114,129,144,159,174
-// 187 nrl 12 nucl science 2014: 19,59,99,139,179,219,259,299,339,379,419,459
-// 177 nrl 12 nucl science 2014: 14,44,74,104,134,164,194,224,254,284,314,344
-// diff gene size: 19,39,59,79,99,119,139,159,179,199,299,319,339,359,379,399,419,439,489,509,529,549,569,589,609,629,649,724,744,764,784, 804,824,844,864,884,904,924,944,964,984
-// equ gene size: 
-//19,39,59,79,99,119,139,159,179,199,299,319,339,359,379,399,419,439,459,479,579,599,619,639,659,679,699,719,739,759,859, 879,899,919,939,959,979,999,1019,1039
-// 12 nucl 62bp linker: 5,67,129,191,253,315,377,439,501,563,625,687
-// yeast example (Diana, corrected by double occupancy; seq is linker_seq_yeast_example.dat): 2,8,27,49,58,196,211,234,265,289,297,297,305,322,335,364,396,417,425,442,466,488,509,608,637,650,679,801,806,825, 854,867,891,909,936,951,1036,1051,1091,1122,1135,1153,1194,1213,1235,1513,1522,1560,1587,1610,1618,1666,1688
-// C.elegans: 14,44,74,104,134,164,194,224,254,284,314,344,374,404,434,464,494,524,554,584,614,644,674,704,734,764,794,824, 914,944,974,1004,1034,1064,1094,1124,1154,1184,1214,1244,1274,1304,1334,1364,1394,1424,1454,1484,1514,1544,1574,1604,1634,1664,1694,1724,1754,1784, 1904,1934,1964,1994,2024,2054,2084,2114,2144,2174,2204,2234,2264,2294,2324,2354,2384,2414,2444,2474,2504,2534,2564,2594
-
-// prototype C.elegans equal gene size/equal NFR (28n-100-28n-100-28n-100-28n, 20.1kb): 14,44,74,104,134,164,194,224,254,284,314,344,374,404,434,464,494,524,554,584,614,644,674,704,734,764,794,824, 924,954,984,1014,1044,1074,1104,1134,1164,1194,1224,1254,1284,1314,1344,1374,1404,1434,1464,1494,1524,1554,1584, 1614,1644,1674,1704,1734,1834,1864,1894,1924,1954,1984,2014,2044,2074,2104,2134,2164,2194,2224,2254,2284,2314,2344, 2374,2404,2434,2464,2494,2524,2554,2584,2614,2644,2744,2774,2804,2834,2864,2894,2924,2954,2984,3014,3044,3074,3104, 3134,3164,3194,3224,3254,3284,3314,3344,3374,3404,3434,3464,3494,3524,3554
-// prototype C.elegans equal gene size/diff NFR (28n-70-28n-120-28n-110-28n, 20.1kb): 14,44,74,104,134,164,194,224,254,284,314,344,374,404,434,464,494,524,554,584,614,644,674, 704,734,764,794,824,894,924,954,984,1014,1044,1074,1104,1134,1164,1194,1224,1254,1284,1314, 1344,1374,1404,1434,1464,1494,1524,1554,1584,1614,1644,1674,1704,1824,1854,1884,1914,1944,1974, 2004,2034,2064,2094,2124,2154,2184,2214,2244,2274,2304,2334,2364,2394,2424,2454,2484,2514,2544,2574,2604,2634,2744, 2774,2804,2834,2864,2894,2924,2954,2984,3014,3044,3074,3104,3134,3164,3194,3224,3254,3284,3314,3344,3374,3404,3434,3464,3494,3524,3554
-// prototype C.elegans diff gene size/equal NFR (27n-100-30n-100-24n-100-31n, 20.1kb): 14,44,74,104,134,164,194,224,254,284,314,344,374,404,434,464,494,524,554,584,614,644,674,704,734,764,794, 894,924,954,984,1014,1044,1074,1104,1134,1164,1194,1224,1254,1284,1314,1344,1374,1404,1434,1464,1494,1524, 1554,1584,1614,1644,1674,1704,1734,1764,1864,1894,1924,1954,1984,2014,2044,2074,2104,2134,2164,2194,2224,2254,2284, 2314,2344,2374,2404,2434,2464,2494,2524,2554,2654,2684,2714,2744,2774,2804,2834,2864,2894,2924, 2954,2984,3014,3044,3074,3104,3134,3164,3194,3224,3254,3284,3314,3344,3374,3404,3434,3464,3494,3524,3554
-// prototype C.elegans diff gene size/diff NFR (27n-70-30n-120-24n-110-31n, 20.1kb): 14,44,74,104,134,164,194,224,254,284,314,344,374,404,434,464,494,524,554,584,614,644,674, 704,734,764,794,864,894,924,954,984,1014,1044,1074,1104,1134,1164,1194,1224,1254,1284,1314,1344,1374, 1404,1434,1464,1494,1524,1554,1584,1614,1644,1674,1704,1734,1854,1884,1914,1944,1974,2004,2034,2064,2094,2124, 2154,2184,2214,2244,2274,2304,2334,2364,2394,2424,2454,2484,2514,2544,2654,2684,2714,2744,2774,2804,2834,2864,2894, 2924,2954,2984,3014,3044,3074,3104,3134,3164,3194,3224,3254,3284,3314,3344,3374,3404,3434,3464,3494,3524,3554
-
-// regular 30bp linker (112 nucleosomes, 20kb): 14,44,74,104,134,164,194,224,254,284,314,344,374,404,434,464,494,524,554,584,614,644,674,704,734,764,794,824, 854,884,914,944,974,1004,1034,1064,1094,1124,1154,1184,1214,1244,1274,1304,1334,1364,1394,1424,1454,1484,1514, 1544,1574,1604,1634,1664,1694,1724,1754,1784,1814,1844,1874,1904,1934,1964,1994,2024,2054,2084,2114,2144,2174, 2204,2234,2264,2294,2324,2354,2384,2414,2444,2474,2504,2534,2564,2594,2624,2654,2684,2714,2744,2774,2804,2834, 2864,2894,2924,2954,2984,3014,3044,3074,3104,3134,3164,3194,3224,3254,3284,3314,3344
-
-
-// prototype yeast equal gene size/equal NFR (30n-100-30n-100-30n-100-30n, 20.3kb): 9,29,49,69,89,109,129,149,169,189,209,229,249,269,289,309,329,349,369,389,409,429,449,469,489,509,529,549,569,589, 689,709,729,749,769,789,809,829,849,869,889,909,929,949,969,989,1009,1029,1049,1069,1089,1109,1129,1149,1169,1189,1209,1229,1249,1269, 1369,1389,1409,1429,1449,1469,1489,1509,1529,1549,1569,1589,1609,1629,1649,1669,1689,1709,1729,1749,1769,1789,1809,1829,1849,1869,1889,1909,1929,1949, 2049,2069,2089,2109,2129,2149,2169,2189,2209,2229,2249,2269,2289,2309,2329,2349,2369,2389,2409,2429,2449,2469,2489,2509,2529,2549,2569,2589,2609,2629
-// prototype yeast equal gene size/diff NFR (30n-70-30n-90-30n-140-30n, 20.3kb): 9,29,49,69,89,109,129,149,169,189,209,229,249,269,289,309,329,349,369,389,409,429,449,469,489,509,529,549,569,589, 659,679,699,719,739,759,779,799,819,839,859,879,899,919,939,959,979,999,1019,1039,1059,1079,1099,1119,1139, 1159,1179,1199,1219,1239,1329,1349,1369,1389,1409,1429,1449,1469,1489,1509,1529,1549,1569,1589,1609,1629,1649, 1669,1689,1709,1729,1749,1769,1789,1809,1829,1849,1869,1889,1909,2049,2069,2089,2109,2129,2149,2169,2189,2209,2229, 2249,2269,2289,2309,2329,2349,2369,2389,2409,2429,2449,2469,2489,2509,2529,2549,2569,2589,2609,2629
-// prototype yeast diff gene size/equal NFR (15n-100-30n-100-20n-100-55n, 20.3kb): 9,29,49,69,89,109,129,149,169,189,209,229,249,269,289,389,409,429,449,469,489,509,529,549,569,589,609, 629,649,669,689,709,729,749,769,789,809,829,849,869,889,909,929,949,969,1069,1089,1109,1129,1149,1169, 1189,1209,1229,1249,1269,1289,1309,1329,1349,1369,1389,1409,1429,1449,1549,1569,1589,1609,1629,1649,1669, 1689,1709,1729,1749,1769,1789,1809,1829,1849,1869,1889,1909,1929,1949,1969,1989,2009,2029,2049,2069,2089, 2109,2129,2149,2169,2189,2209,2229,2249,2269,2289,2309,2329,2349,2369,2389,2409,2429,2449,2469,2489,2509,2529,2549,2569,2589,2609,2629
-// prototype yeast diff gene size/diff NFR (15n-70-30n-90-20n-140-55n, 20.3kb): 9,29,49,69,89,109,129,149,169,189,209,229,249,269,289,359,379,399,419,439,459,479,499,519,539,559,579,599, 619,639,659,679,699,719,739,759,779,799,819,839,859,879,899,919,939,1029,1049,1069,1089,1109,1129,1149,1169, 1189,1209,1229,1249,1269,1289,1309,1329,1349,1369,1389,1409,1549,1569,1589,1609,1629,1649,1669,1689,1709,1729, 1749,1769,1789,1809,1829,1849,1869,1889,1909,1929,1949,1969,1989,2009,2029,2049,2069,2089,2109,2129,2149,2169, 2189,2209,2229,2249,2269,2289,2309,2329,2349,2369,2389,2409,2429,2449,2469,2489,2509,2529,2549,2569,2589,2609,2629
-
-
 
 /* Initialize all variables at beginning of code!! */ 
 
@@ -447,11 +390,6 @@ file_twis=fopen(filename, "w");
 /* ------- End Initialze for tables and files --------- */
 
 
-
-
-
-
-
 srand (getpid());		// initialize random seed (the random seed is initialized to a value representing the current time (calling time) to generate a different value every time the program is run.)
 
 
@@ -483,9 +421,6 @@ names[4]="roll";
 names[5]="twis";
 
 /* ----------------------------------End of part--------------------------------------- */
-
-
-
 
 
 /* ------------------------------- Looping and selection variables ------------------------------- */
@@ -568,8 +503,6 @@ nucl_fl_excl_vol = 55;		// minimum distance between nucleosome and floating part
 /* ---- Partial charges phosphates ---- */
 q_link = -1.0;			// linker DNA
 q_nucl_dna = -1.0;		// Nucleosomal DNA
-
-
 
 
 /* ---- Parameters for nucleosome ---- */
@@ -666,12 +599,6 @@ prepare_mc(xconf0,xconf0_mc,ist_mc,ist,ist_nucl,ins_nucl,no_nucl,len_seq_nucl,ge
 readini(itot_mc,xconfi_mc);
 // Set working coordinates and energies equal to the starting ones
 transfer_hel_coord(0,itot_mc,xconf_mc,xconfi_mc);
-
-//for(i=0;i<itot_mc;i++){for(j=0;j<6;j++){printf("%f ",xconf0_mc[j][i]);} printf(" \n");}
-//for(i=0;i<len_all;i++){for(j=0;j<6;j++){printf("%f ",xconf_all[j][i]);} printf(" \n");}
-//for(i=0;i<len_all;i++){printf("%s \n",ist_all[i]);}
-//for(i=0;i<itot_mc;i++){printf("%s \n",ist_mc[i]);}
-
 
 
 num_bp = itot+1;
@@ -960,26 +887,10 @@ printf("\n");*/
 	// Combine linker and nucleosomal DNA
 	cmb_link_nucl(xconf_mc,xconf_nucl,xconf_all,ist_mc,ist_nucl,ist_all,ins_nucl,no_nucl,len_bp_nucl,len_seq_nucl,itot_mc,len_all,get_itt,&real_itt);
 
-	//printf("real_itt %d\n",real_itt);
-
-	//for(i=0;i<len_all-2;i++){for(j=0;j<6;j++){xconf_all[j][i] = xconf_all[j][i+2];}} len_all = 146;	//just to get a single nucleosome
-	//for(i=0;i<20;i++){for(j=0;j<6;j++){printf("%f ",xconf_all[j][i]);} printf(" %d \n",i);}
-	//for(i=0;i<len_all;i++){for(j=0;j<6;j++){if(xconf_all[j][i] == xconf_nucl[j][0]) printf("%d\n",i);}}
-
-	// Cartesian reconstruction of whole structure used for MC
-
-	//transfer_pos_and_orient(buf_real_itt,len_all,orient_store,pos_store,orient_new,pos_new);	// Save coordinates and orientations from
-
-	//for(j=1200;j<1210;j++){for(i=0;i<3;i++){printf("%lf ",pos_old[j][i]);} printf("\n");} printf("\n");
-	
-	//cart_rec_old(len_all,no_rot_pars,xconf_all,pos_old,orient_old,R_T_mst,R_T_i);	
 	
 	if(psi>1){
 	end_to_end_dist_fast(len_all,real_itt,no_rot_pars,xconf_all,pos_old,orient_old,R_T_mst,R_T_i);
-	
-	//end_to_end_dist_fast_orig_felipe(len_all,real_itt,len_all,no_rot_pars,xconf_all,pos_old,orient_old);
-	//cart_rec_old(len_all,no_rot_pars,xconf_all,pos_old,orient_old,R_T_mst,R_T_i);
-	
+		
 	         }
 	else{	// To reconstruct in the beginning
 	cart_rec_old(len_all,no_rot_pars,xconf_all,pos_old,orient_old,R_T_mst,R_T_i);
@@ -987,51 +898,15 @@ printf("\n");*/
 	transfer_pos_and_orient(0,len_all,orient_store,pos_store,orient_old,pos_old);
 	transfer_R(0,len_all,store_R_T_mst,store_R_T_i,R_T_mst,R_T_i);
 	}
-	//if(psi%1 == 0){cart_rec_old(len_all,no_rot_pars,xconf_all,pos_new,orient_new,buf_R_T_mst,buf_R_T_i);}
-	//     }
-	
-	//for(j=2100;j<2110;j++){for(i=0;i<3;i++){printf("%lf ",pos_new[j][i]);} printf("\n");} printf("\n");
-	//for(j=2100;j<2110;j++){for(i=0;i<3;i++){printf("%lf ",pos_old[j][i]);} printf("\n");} printf("\n");
 
-	//for(j=0;j<len_all;j++){for(i=0;i<3;i++){if(abs(pos_old[j][i] - pos_new[j][i]) > 0.001){ printf("psi %d fail %d real_itt %d\n",psi,j,real_itt); return;} }} 
-
-	/*---------------------------------End of MC algorithm-----------------------------*/
-
-	//printf("enertot %lf \n", enertot);
-	//printf("endenergy %lf \n", endenergy);	
-	//printf("buf_enertot %lf \n", buf_enertot);
-
-
-	/* --------------------------- Check if created structure overlaps --------------------------- */
-
-	/* ---- Position of bp and floating particles and calculate if overlap ---- */
-	
-	// Construct nucleosome center
 
 	nucl_positions(nucl_pos,orient_old,pos_old,center_nucl,ins_nucl,no_nucl);
-
-	//for(j=0;j<no_nucl;j++){for(i=0;i<3;i++){printf("%lf ",nucl_pos[j][i]);} printf("\n");} printf("\n");
-
-	/*double buf[3];
-	for(i=0;i<3;i++){buf[i] = 0;}		// Gives same result!!!
-	for(i=ins_nucl[0]-1;i<ins_nucl[0]-1+147;i++){
-							for(j=0;j<3;j++){buf[j] = buf[j] + pos_old[i][j];}
-							}
-	for(j=0;j<3;j++){buf[j] = buf[j]/147;}
-	for(i=0;i<3;i++){printf("buf %lf ",buf[i]);} printf("\n");*/
-
-	// Finish construct nucleosome center
-
-	/* ---- Calculate distances between nucleosomes and DNA ---- */
-
 	nucl_dist(bp_all,no_nucl,num_fl,itot,acc,center_bp,nucl_pos,ins_nucl,pos_old,d_nucl,d_nucl_bp,d_nucl_fl,xyz_float,cut_d_bp_nucl,&m_nucl_bp);
 	
 	// Check hardcore overlap between nucleosomes, bp and floating particles
 
 	check_olap(bp_all,num_fl,len_all,acc,center_bp,pos_old,d_bp,d_bp_fl,xyz_float,bp_excl_vol,bp_fl_excl_vol, no_nucl,d_nucl,d_nucl_bp,d_nucl_fl,nucl_nucl_excl_vol, nucl_bp_excl_vol,nucl_fl_excl_vol,red_bp_all,&vol_olap_start);
-	//vol_olap_start = 0;	
-	//printf("Overlap starting structure %d\n",vol_olap_start);
-	//vol_olap_start = 0;
+
 
 	if(vol_olap_start == 1){if(psi>0){enertot = buf_enertot;}	// rejected (Volume overlaps)
 				if(psi==0){start_sim = 2;}
@@ -1051,29 +926,13 @@ printf("\n");*/
 
 	/* ---- Separate linker and nucleosomal DNA ---- */
 
-	sep_nucl_dna(linker_pos, linker_orient, nucl_dna_pos, nucl_dna_orient, orient_old, pos_old, ins_nucl, no_nucl, len_all);	//length of linker: itot_mc; length of nucl_dna: no_nucl*len_bp_nucl
-
-	//for(i=0;i<itot_mc;i++){for(j=0;j<3;j++){printf("%lf ",linker_pos[i][j]);} printf("\n");}
-	
+	sep_nucl_dna(linker_pos, linker_orient, nucl_dna_pos, nucl_dna_orient, orient_old, pos_old, ins_nucl, no_nucl, len_all);
 
 	index_nucl_dna(link_nucl_index,ins_nucl,no_nucl,len_all);
 	for(i=0;i<2*no_nucl+2;i++){ph_link_nucl_index[i] = 2*link_nucl_index[i];}
 
-	//index_ph_nucl_dna(ph_link_nucl_index,ins_nucl,no_nucl,len_all);
-	
-
-	//for(i=0;i<2*no_nucl+2;i++){printf("%d \n", link_nucl_index[i]);}
-	//for(i=0;i<2*no_nucl+2;i++){printf("%d \n", ph_link_nucl_index[i]);}
-
 	charges_ph(arr_q_ph, q_link, q_nucl_dna, ph_link_nucl_index, ins_nucl, no_nucl, len_all);
 
-	//for(i=2*len_all-41;i<2*len_all;i++){printf("%lf \n", arr_q_ph[i]);}
-
-
-	/* ---- Get DH + LJ for current configuration ---- */
-
-	
-	/* -------------- Calculate Phosphate position -------------- */
 
 	if(psi>1){
 			partial_ph_pos(bp_all,len_all,d_ph_midbp,mid_bp,center_bp,dir_bp,orient_old,dir_ph,pos_ph,real_itt);
@@ -1081,26 +940,14 @@ printf("\n");*/
 	else	 {	ph_pos(bp_all,len_all,d_ph_midbp,mid_bp,center_bp,dir_bp,orient_old,dir_ph,pos_ph);
 			transfer_ph_pos(0,2*bp_all,buf_pos_ph,pos_ph);
 		  }
-
-	//for(i=0;i<10;i++){for(j=0;j<3;j++){printf("%lf ",pos_ph[i][j]);} printf("\n");}
-
-	
-	// Get distances between ph and between ph and floating particles
 	
 	if(min_ph == 1){dist_ph_MIN(bp_all,num_fl,acc_ph,pos_ph,d_ph1,d_ph2,d_ph_fl,xyz_float,no_nucl,ins_nucl,d_nucl_ph,nucl_pos,in_q_ph_ph_MIN,in_q_nucl_ph,cut_d_ph_nucl,&m_nucl_ph,red_ph);
 			}
 	else{		dist_ph(bp_all,num_fl,acc_ph,pos_ph,d_ph1,d_ph2,d_ph_fl,xyz_float,no_nucl,ins_nucl,d_nucl_ph,nucl_pos,in_q_ph_ph,in_q_nucl_ph,cut_d_ph_nucl,&m_nucl_ph,red_ph);
 	     }
 
-	
-	//for(i=0;i<2*bp_all;i++){for(j=0;j<2*bp_all;j++){if(d_ph1[i][j] > 0){printf("%lf ",d_ph1[i][j]);}} printf("\n");}
-	
-	/* ---- Calculate Lenard-Jones (nucleosome vs nucleosome, bp, float) ---- */
 
 	calc_lj_nucl(&k5,&k6,&k7,red_bp_all,no_nucl,d_nucl,d_nucl_bp,d_nucl_fl,lj_nucl_cut_low,lj_nucl_cut_up,lj_nucl,lj_nucl_bp,lj_nucl_fl,lj_k_nucl,lj_k_nucl_bp, lj_k_nucl_fl,lj_a_nucl,lj_a_bp_nucl,acc,num_fl,lj_a_nucl_fl,&e_nucl_lj);
-
-	//printf("e_nucl_lj %lf\n",e_nucl_lj*23);
-	//printf("LJ nucl %d %d %d\n",k5,k6,k7);
 
 	/* ---------- Calculate DH potential (nucleosome vs nucleosome, ph, float) ---------- */
 
@@ -1110,8 +957,6 @@ if(min_ph == 1){calc_dh_nucl_MIN(&k8,&k9,&k10,bp_all,no_nucl,d_nucl,d_nucl_ph,d_
 else{	calc_dh_nucl(&k8,&k9,&k10,bp_all,no_nucl,d_nucl,d_nucl_ph,d_nucl_fl,dh_nucl_cut_low,dh_nucl_cut_up,dh_nucl,dh_nucl_ph,dh_nucl_fl,q_nucl, arr_q_ph,q_fl,in_q_nucl_ph,acc_ph,num_fl,eps,kappa,f_pi_eps0,red_ph,&e_nucl_dh);
      }
 
-	//printf("e_nucl_dh %lf\n",e_nucl_dh*23);
-	//printf("DH nucl %d %d %d\n",k8,k9,k10);
 
 	/* ---- Calculate Lenard-Jones (bp + float) ---- */
 	
@@ -1125,9 +970,6 @@ if(min_ph == 1){calc_dh_MIN(&k3,&k4,bp_all,dh_ph,d_ph1,d_ph2,dh_cut_low,dh_cut_u
 else{	calc_dh(&k3,&k4,bp_all,dh_ph,d_ph1,d_ph2,dh_cut_low,dh_cut_up,arr_q_ph,eps,kappa,f_pi_eps0,acc_ph,num_fl,dh_ph_fl,d_ph_fl,q_fl,in_q_ph_ph,red_ph,&e_dh_ph_phfl);
      }
 
-	//printf("LJ %d %d %d %d %d\n",k1,k2,k5,k6,k7);
-	//printf("DH %d %d %d %d %d\n",k3,k4,k8,k9,k10);
-	/*----Total energy (DH ph-ph/ph-fl, LJ bp-bp/bp_fl)----*/
 	
 	double buf_tot_dh_lj;
 	buf_tot_dh_lj = tot_dh_lj;
@@ -1135,15 +977,6 @@ else{	calc_dh(&k3,&k4,bp_all,dh_ph,d_ph1,d_ph2,dh_cut_low,dh_cut_up,arr_q_ph,eps
 	tot_dh = 0;
 	tot_lj = 0;
 	tot_dh_lj = 0;
-	/*for(i=0;i<k1;i++){tot_dh_lj = tot_dh_lj + lj_bp[i][0];
-			  tot_lj = tot_lj + lj_bp[i][0];}
-	for(i=0;i<k2;i++){tot_dh_lj = tot_dh_lj + lj_bp_fl[i][0];
-			  tot_lj = tot_lj + lj_bp_fl[i][0];}
-	for(i=0;i<k3;i++){tot_dh_lj = tot_dh_lj + dh_ph[i][0];
-			  tot_dh = tot_dh + dh_ph[i][0];}
-	for(i=0;i<k4;i++){tot_dh_lj = tot_dh_lj + dh_ph_fl[i][0];
-			  tot_dh = tot_dh + dh_ph_fl[i][0];}*/
-
 
 	tot_dh_lj = e_lj_bp_bpfl + e_dh_ph_phfl;
 	
@@ -1159,11 +992,7 @@ else{	calc_dh(&k3,&k4,bp_all,dh_ph,d_ph1,d_ph2,dh_cut_low,dh_cut_up,arr_q_ph,eps
 	//iflag = 1;
 
 	if(do_sim_ann == 1){sim_ann(tmax,psi,&t,factor,boltz,temp,buf_tot_en,tot_en,&iflag);}
-	//printf("t %lf \n",t);
-	//printf("iflag %d\n",iflag);
-	//printf("tot_en %lf\n",tot_en);
-	//printf("buf_tot_en %lf\n",buf_tot_en);
-		if(iflag==2){	// rejected
+
 				if(psi<=1){start_sim = 2;}
 				transfer_hel_coord(0,itot_mc,xconf_mc,xconf_buf);
 				enertot = buf_enertot;
@@ -1185,10 +1014,7 @@ else{	calc_dh(&k3,&k4,bp_all,dh_ph,d_ph1,d_ph2,dh_cut_low,dh_cut_up,arr_q_ph,eps
 	//printf("Time taken for one MC step MC: %d seconds %d milliseconds\n", msec/1000, msec%1000);
 
 	if(iflag == 1){if(psi%1 == 0){
-			//printf("Total energy LJ (DNA) + LJ (nuc) + DH (DNA) + DH (nuc) + elastic = %.3f + %.3f + %.3f + %.3f + %.3f = %.3f kcal/mol\n",e_lj_bp_bpfl,e_nucl_lj,e_dh_ph_phfl,e_nucl_dh,endenergy,tot_en);
-			//printf("Energy change LJ + DH: %lf\n", (tot_dh_lj - buf_tot_dh_lj)*23);
-			//printf("END enertot %lf \n", enertot);
-			//printf("psi %d\n",psi); 
+
 					}
 			err_count = 0;	
 			if(psi>0){it_acc_mc[acc_mc] = get_itt;
@@ -1239,9 +1065,7 @@ else{	calc_dh(&k3,&k4,bp_all,dh_ph,d_ph1,d_ph2,dh_cut_low,dh_cut_up,arr_q_ph,eps
 	//printf("End if statement vol_olap_start\n");
 	
     }
-    //printf("End loop with psi\n");
-//for(i=0;i<len_all;i++){for(j=0;j<6;j++){printf("%f ",xconf_all[j][i]);} printf(" \n");}
-	//printf("save_en %lf\n",save_en[0][1]);
+
 
 	/* ----- Output positions and triads ----- */
 	write_bp_pos_in_table(table_bp,len_all,phi,pos_old,out_folder,-1); 
