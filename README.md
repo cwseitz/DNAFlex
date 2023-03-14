@@ -1,6 +1,6 @@
 # DNAFlex
 
-Abbreviated as just DNAFlex, this is code for my PhD thesis *Phase transitions of DNA-protein condensates during the immune response: an information geometric perspective*
+This is code for my PhD thesis *Phase transitions of DNA-protein condensates during the immune response: an information geometric perspective*
 The code contains various statistical inference software, statistical physics simulations, modules for simulating and analyzing images of super-resolution images of single nucleosomes.
 
 ## Current modules
