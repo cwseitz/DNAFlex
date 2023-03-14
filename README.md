@@ -1,6 +1,7 @@
 # DNAFlex
 
-Abbreviated as just DNAFlex, this is a library built on Python and C for single molecule localization microscopy (SMLM) experiment design, optimization, and analysis associated with DNA structure at the scale of rigid nucleosomes
+Abbreviated as just DNAFlex, this is code for my PhD thesis *Phase transitions of DNA-protein condensates during the immune response*
+The code contains various statistical software and statistical physics simulations, modules for simulating and analyzing images of super-resolution images of single nucleosomes.
 
 ## Current modules
 
